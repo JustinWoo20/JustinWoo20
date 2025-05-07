@@ -21,9 +21,11 @@ def game(guess):
     current_score = player_score
     if guess == "A" and person_A["follower_count"] > person_B["follower_count"]:
         current_score += 1
+        print("\n" * 20)
         print(f"Correct! Current score: {current_score}")
         game_over = False
     elif guess == "A" and person_A["follower_count"] < person_B["follower_count"]:
+        print("\n" * 20)
         print(art.you_lose)
         print(f"Final score: {current_score}")
         game_over = True
@@ -31,8 +33,10 @@ def game(guess):
     elif guess == "B" and person_A["follower_count"] < person_B["follower_count"]:
         current_score += 1
         game_over = False
+        print("\n" * 20)
         print(f"Correct! Current score: {current_score}")
     elif guess == "B" and person_A["follower_count"] > person_B["follower_count"]:
+        print("\n" * 20)
         print(art.you_lose)
         print(f"Final score: {current_score}")
         game_over = True
