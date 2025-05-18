@@ -1,20 +1,58 @@
-from data import question_data
-from question_model import Question
-from quiz_brain import QuizBrain
+import turtle
+import pandas
 
-question_bank = []
+FONT = ("Trebuchet MS", 8, "bold")
+WINNING_FONT = ("Trebuchet MS", 20, "bold")
+screen = turtle.Screen()
+screen.title("U.S. States Game")
+image = "blank_states_img.gif"
+screen.addshape(image)
+turtle.shape(image)
 
-for text in question_data:
-    q_text = text["question"]
-    q_answer = text["correct_answer"]
-    new_question = Question(q_text, q_answer)
-    question_bank.append(new_question)
+state_data = pandas.read_csv("50_states.csv")
+state_list = state_data.state.to_list()
+correct_guesses = []
 
-quiz = QuizBrain(question_bank)
 
-while quiz.still_has_questions():
-    quiz.next_question()
 
-print("You've completed the quiz")
-print(f"Your final score was {quiz.score}/{quiz.question_number}!")
+game_is_on = True
+while game_is_on:
+    answer_state = screen.textinput(title=f"{len(correct_guesses)}/50 States Correct", prompt="What's another state's name?").title()
+    # If already guessed skip over
+    if answer_state == "Exit":
+        missing_states = []
+        for state in state_list:
+            if state not in correct_guesses:
+                missing_states.append(state)
+        new_data = pandas.DataFrame(missing_states)
+        new_data.to_csv("States to Learn")
+        print(new_data)
+        break
+
+    if answer_state in correct_guesses:
+        pass
+    else:
+        #Check if the guessed state is correct
+        if answer_state in state_list:
+            answer_data = state_data[state_data.state == answer_state]
+            #Get state coordinates
+            state_x = int(answer_data.x.values[0])
+            state_y = int(answer_data.y.values[0])
+            correct_guesses.append(answer_state)
+
+    # Move the name
+            writer = turtle.Turtle()
+            writer.penup()
+            writer.hideturtle()
+            writer.goto(state_x, state_y)
+            writer.write(arg= answer_state, font=FONT)
+
+    if len(correct_guesses) == 50:
+        wt = turtle.Turtle()
+        wt.penup()
+        wt.hideturtle()
+        wt.write(arg="Congratulations! You got all 50 states!", font=WINNING_FONT)
+
+
+
 
