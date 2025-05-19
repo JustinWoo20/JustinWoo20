@@ -20,10 +20,7 @@ while game_is_on:
     answer_state = screen.textinput(title=f"{len(correct_guesses)}/50 States Correct", prompt="What's another state's name?").title()
     # If already guessed skip over
     if answer_state == "Exit":
-        missing_states = []
-        for state in state_list:
-            if state not in correct_guesses:
-                missing_states.append(state)
+        missing_states = [missing_states = [states for states in state_list if states not in correct_guesses]]
         new_data = pandas.DataFrame(missing_states)
         new_data.to_csv("States to Learn")
         print(new_data)
