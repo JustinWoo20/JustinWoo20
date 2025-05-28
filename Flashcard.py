@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import pandas
 import random
 
@@ -6,19 +7,21 @@ import random
 GREEN = "#DDF6D2"
 FONT = ("Ariel", 40, "italic")
 
-
 # ---------------------Flashcards ------------------------------
-words_to_learn = pandas.read_csv("Word List.csv")
+words_to_learn = pandas.read_csv("flashcard_data/Word List.csv")
 words_dict = words_to_learn.to_dict("records")
 try:
-    known_words_df = pandas.read_csv("Known Words.csv")
+    known_words_df = pandas.read_csv("flashcard_data/Known Words.csv")
     known_words = known_words_df.to_dict("records")
 except FileNotFoundError:
     known_words = []
 
 words_dict = [word for word in words_dict if word not in known_words]
-correct_words = []
 
+if not words_dict:
+    messagebox.showinfo("Congratulations", "You've learned all the words!")
+
+correct_words = []
 
 current_word = {}
 def generate_word():
@@ -43,13 +46,17 @@ def mark_correct():
     generate_word()
 
 # ----------------------UI Setup --------------------------------
-window = tk.Tk()
+window =tk.TK()
 window.title("Japanese Flashcards")
 window.config(padx=50, pady=50, bg=GREEN)
 
 canvas = tk.Canvas(width=800, height=526, bg=GREEN, highlightthickness=0)
-flashcard_front = tk.PhotoImage(file="flash-card-project-start/images/card_front.png")
-flashcard_back = tk.PhotoImage(file="flash-card-project-start/images/card_back.png")
+try:
+    flashcard_front = tk.PhotoImage(file="images/card_front.png")
+except tk.TclError:
+    messagebox.showerror(title="Error", message="Image files not found. Please check your image paths.")
+    window.destroy()
+flashcard_back = tk.PhotoImage(file="images/card_back.png")
 current_side = canvas.create_image(400, 263)
 
 card_title = canvas.create_text(400, 150, font=FONT)
@@ -57,11 +64,11 @@ card_word = canvas.create_text(400, 300, font=FONT)
 canvas.grid(row=0, columnspan=2, column=0)
 
 
-right_image = tk.PhotoImage(file="flash-card-project-start/images/right.png")
+right_image = tk.PhotoImage(file="images/right.png")
 right_button = tk.Button(image=right_image, highlightthickness=0, command=mark_correct)
 right_button.grid(row=1, column=1)
 
-wrong_image = tk.PhotoImage(file="flash-card-project-start/images/wrong.png")
+wrong_image = tk.PhotoImage(file="images/wrong.png")
 wrong_button = tk.Button(image=wrong_image, highlightthickness=0, command=generate_word)
 wrong_button.grid(row=1, column=0)
 
