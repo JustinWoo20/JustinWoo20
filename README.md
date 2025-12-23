@@ -9,3 +9,4 @@ Links to other projects
 - https://github.com/JustinWoo20/stock-news-alert
 - https://github.com/JustinWoo20/fatal-force
 - https://github.com/JustinWoo20/state-guessing-game
+- https://github.com/JustinWoo20/stock-screener
